@@ -2,16 +2,18 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import {filterImageFromURL, deleteLocalFiles} from './util/util';
 
+
 (async () => {
 
   // Init the Express application
   const app = express();
 
   // Set the network port
-  const port = process.env.PORT || 8082;
+  const port = process.env.PORT || 9090;
   
   // Use the body parser middleware for post requests
   app.use(bodyParser.json());
+  var validate_url = require("url");
 
   // @TODO1 IMPLEMENT A RESTFUL ENDPOINT
   // GET /filteredimage?image_url={{URL}}
@@ -30,7 +32,17 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
   /**************************************************************************** */
 
   //! END @TODO1
-  
+  app.get("/filteredimage", async (req,res)=>{
+
+    if(!req.params){
+      return res.status(401).send({ message: 'No request params.' });
+    }
+    const url = req.query.image_url;
+    await filterImageFromURL(url).then(filteredpath => {
+      res.status(200).sendFile(filteredpath, () => {deleteLocalFiles([filteredpath]);} );
+    })
+
+  });
   // Root Endpoint
   // Displays a simple message to the user
   app.get( "/", async ( req, res ) => {
