@@ -1,1 +1,4 @@
 https://github.com/zack-schulfler/cloud-developer/tree/master/course-02/project/image-filter-starter-code
+
+
+End Point URL : End Point URL : http://image-filter-starter-code-dev2222.us-east-2.elasticbeanstalk.com/filteredimage?image_url=https://upload.wikimedia.org/wikipedia/commons/b/bd/Golden_tabby_and_white_kitten_n01.jpg
