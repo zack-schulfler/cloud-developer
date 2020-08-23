@@ -1,7 +1,7 @@
 import express from 'express';
+import { Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import {filterImageFromURL, deleteLocalFiles} from './util/util';
-import * as bcrypt from 'bcrypt';
 
 (async () => {
 
@@ -32,33 +32,14 @@ import * as bcrypt from 'bcrypt';
   /**************************************************************************** */
 
   //! END @TODO1
-  app.get("/filteredimage", async (req,res)=>{
-
-    if(!req.params){
-      return res.status(401).send({ message: 'No request params.' });
+  app.get('/filteredimage',  async (req: Request, res: Response) => {
+    if(!req.query.image_url){
+      return res.status(401).send({ message: 'No request query.' });
     }
-
-
     let url = req.query.image_url;
-    let plainTextPassword = req.query.auth;
-    generatePassword (plainTextPassword)
     await filterImageFromURL(url).then(filteredpath => {
       res.status(200).sendFile(filteredpath, () => {deleteLocalFiles([filteredpath]);} );
     })
-
-    async function generatePassword(plainTextPassword: string): Promise<string> {
-      //@TODO Use Bcrypt to Generated Salted Hashed Passwords
-      const Round = 10;
-      const salt = await bcrypt.genSalt(Round);
-      const hash = await bcrypt.hash(plainTextPassword,salt);
-      return hash;
-  }
-
-async function comparePasswords(plainTextPassword: string, hash: string): Promise<boolean> {
-      //@TODO Use Bcrypt to Compare your password to your Salted Hashed Password
-      return await bcrypt.compare(plainTextPassword,hash)
-  }
-
   });
   // Root Endpoint
   // Displays a simple message to the user
