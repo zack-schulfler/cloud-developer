@@ -1,6 +1,5 @@
 import fs from 'fs';
 import Jimp = require('jimp');
-import * as bcrypt from 'bcrypt';
 
 // filterImageFromURL
 // helper function to download, filter, and save the filtered image locally
@@ -33,16 +32,5 @@ export async function deleteLocalFiles(files:Array<string>){
         fs.unlinkSync(file);
     }
 
- async function generatePassword(plainTextPassword: string): Promise<string> {
-        //@TODO Use Bcrypt to Generated Salted Hashed Passwords
-        const Round = 10;
-        const salt = await bcrypt.genSalt(Round);
-        const hash = await bcrypt.hash(plainTextPassword,salt);
-        return hash;
-    }
-    
-async function comparePasswords(plainTextPassword: string, hash: string): Promise<boolean> {
-        //@TODO Use Bcrypt to Compare your password to your Salted Hashed Password
-        return await bcrypt.compare(plainTextPassword,hash)
-    }
+
 }
